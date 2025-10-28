@@ -7,15 +7,24 @@ python evaluation/metric_all_task.py \
 --folder1 result/Step1X-Edit/Pretrain \
 --folder2 result/Step1X-Edit/RegionE
 
+python evaluation/metric_merge.py \
+--direction result/Step1X-Edit/RegionE
+
 # FLUX.1 Kontext Pretrain vs RegionE
 python evaluation/metric_all_task.py \
 --folder1 result/FluxKontext/Pretrain \
 --folder2 result/FluxKontext/RegionE
 
+python evaluation/metric_merge.py \
+--direction result/FluxKontext/RegionE
+
 # Qwen-Image Pretrain vs RegionE
 python evaluation/metric_all_task.py \
 --folder1 result/Qwen-Image/Pretrain \
 --folder2 result/Qwen-Image/RegionE
+
+python evaluation/metric_merge.py \
+--direction result/Qwen-Image/RegionE
 
 # -----------------------------------------------
 # GPT4o-Score evaluation script 

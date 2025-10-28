@@ -4,10 +4,9 @@ import time
 import torch
 import argparse
 
-from utils import MANAGER
-from inplace import regione_init
 from diffusers.utils import load_image
-from diffusers import FluxKontextPipeline
+from utils import MANAGER, FluxKontextPipeline, pipeline_call
+from inplace import regione_init
 
 if __name__ == "__main__":
 
@@ -36,6 +35,7 @@ if __name__ == "__main__":
         MANAGER.set_parameters(args)
         pipe = regione_init(args.model_path, args.device)
     else:
+        FluxKontextPipeline.__call__ = pipeline_call    # fix the resolution
         pipe = FluxKontextPipeline.from_pretrained(args.model_path, torch_dtype=torch.bfloat16).to(args.device)
 
     if not args.evaluation:
@@ -47,6 +47,7 @@ if __name__ == "__main__":
                 metadata.append(json.loads(data))
 
         # warmup
+        print("Warmup...")
         for _ in range(3):
             _ = pipe(
                 image=load_image('assets/demo_0.png'),
@@ -70,7 +71,7 @@ if __name__ == "__main__":
             torch.cuda.synchronize()
             t1 = time.time()
             print(f"Time consuming: {t1-t0}s")
-            image.save(f"{args.output_dir}/{data['key']}.png")
+            image.save(f"{args.output_dir}/{os.path.basename(data['key'])}.png")
             print(f"Image has been saved to {args.output_dir}")
 
     else:
@@ -86,6 +87,7 @@ if __name__ == "__main__":
                     metadata.append(json.loads(line))
 
             # warmup
+            print("Warmup...")
             for _ in range(3):
                 _ = pipe(
                     image=load_image('assets/demo_0.png'),

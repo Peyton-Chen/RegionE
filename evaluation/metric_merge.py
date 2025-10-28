@@ -45,7 +45,6 @@ def merge_kontext(path):
                 latency = json.load(f)
             num_prompt, ave_latency = latency['num_item'], latency['ave_time_consuming']
             
-
             PSNR_sum += PSNR * num_prompt
             SSIM_sum += SSIM * num_prompt
             LPIPS_sum += LPIPS * num_prompt
@@ -106,7 +105,6 @@ def merge_gedit(path):
             with open(latency_path, 'r') as f:
                 latency = json.load(f)
             num_prompt, ave_latency = latency['num_item'], latency['ave_time_consuming']
-            
 
             PSNR_sum += PSNR * num_prompt
             SSIM_sum += SSIM * num_prompt

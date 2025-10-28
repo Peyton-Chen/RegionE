@@ -4,10 +4,10 @@ import json
 import torch
 import argparse
 
-from utils import MANAGER
-from inplace import regione_init
 from diffusers.utils import load_image
-from diffusers import Step1XEditPipeline
+from inplace import regione_init
+from utils import MANAGER, Step1XEditPipeline, pipeline_call
+
 
 if __name__ == "__main__":
 
@@ -36,8 +36,8 @@ if __name__ == "__main__":
         MANAGER.set_parameters(args)
         pipe = regione_init(args.model_path, args.device)
     else:
+        Step1XEditPipeline.__call__ = pipeline_call     # fix the resolution
         pipe = Step1XEditPipeline.from_pretrained(args.model_path, torch_dtype=torch.bfloat16).to(args.device)
-
 
     if not args.evaluation:
         # Demonstration with a single image (Demo)
@@ -47,6 +47,7 @@ if __name__ == "__main__":
             for data in f:
                 metadata.append(json.loads(data))
 
+        print("Warmup...")
         for _ in range(3):
             _ = pipe(
                 image=load_image(f'assets/demo_0.png'),
@@ -71,7 +72,7 @@ if __name__ == "__main__":
             torch.cuda.synchronize()
             t1 = time.time()
             print(f"Time consuming: {t1-t0}s")
-            image.save(f"{args.output_dir}/{data['key']}.png")
+            image.save(f"{args.output_dir}/{os.path.basename(data['key'])}.png")
             print(f"Image has been saved to {args.output_dir}")
     else:
         # Generate batch images based on metadata (for evaluation)
@@ -87,6 +88,7 @@ if __name__ == "__main__":
                     metadata.append(json.loads(line))
 
             # warmup
+            print("Warmup...")
             for _ in range(3):
                 _ = pipe(
                     image=load_image('assets/demo_0.png').convert("RGB"),

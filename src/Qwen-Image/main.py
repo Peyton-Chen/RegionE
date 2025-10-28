@@ -49,9 +49,10 @@ if __name__ == "__main__":
                 metadata.append(json.loads(data))
 
         # warmup
+        print("Warmup...")
         for _ in range(3):
             _ = pipe(
-                image=Image.open(f'assets/demo0.png').convert("RGB"),
+                image=Image.open(f'assets/demo_0.png').convert("RGB"),
                 prompt='just warmup!',
                 num_inference_steps=args.num_inference_steps,
                 true_cfg_scale=args.guidance_scale,
@@ -75,7 +76,7 @@ if __name__ == "__main__":
             t1 = time.time()
 
             print(f"Time consuming: {t1-t0}s")
-            image.save(f"{args.output_dir}/{data['key']}.png")
+            image.save(f"{args.output_dir}/{os.path.basename(data['key'])}.png")
             print(f"Image has been saved to {args.output_dir}")
 
     else:
@@ -91,6 +92,7 @@ if __name__ == "__main__":
                     metadata.append(json.loads(line))
 
             # warmup
+            print("Warmup...")
             for _ in range(3):
                 _ = pipe(
                     image=Image.open('assets/demo_0.png').convert("RGB"),

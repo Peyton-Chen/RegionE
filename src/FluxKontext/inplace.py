@@ -3,12 +3,9 @@ import numpy as np
 import torch.nn.functional as F
 from typing import Optional, Union, List, Dict, Any, Callable, Tuple
 
-from diffusers import FluxKontextPipeline
-from diffusers.image_processor import PipelineImageInput
 from diffusers.models.embeddings import apply_rotary_emb
 from diffusers.models.attention_processor import Attention
 from diffusers.models.modeling_outputs import Transformer2DModelOutput
-from diffusers.pipelines.flux import FluxPipelineOutput
 from diffusers.schedulers import FlowMatchEulerDiscreteScheduler
 from diffusers.utils import (
     is_torch_xla_available,
@@ -24,6 +21,10 @@ from utils import (
     ids_gather,
     ids_scatter,
     token_selector,
+    PipelineImageInput,
+    FluxPipelineOutput,
+    FluxKontextPipeline,
+    PREFERRED_KONTEXT_RESOLUTIONS,
     FlowMatchEulerDiscreteSchedulerOutput
 )
 if is_torch_xla_available():
@@ -44,26 +45,6 @@ gamma = torch.tensor([0.8352, 0.9986, 1.0090, 1.0097, 1.0161, 1.0152, 1.0160, 1.
         1.0199, 1.0213, 1.0203, 1.0257, 1.0236, 1.0235, 1.0278, 1.0302, 1.0311,
         1.0352, 1.0371, 1.0391, 1.0459, 1.0498, 1.0581, 1.0693, 1.0866, 1.1090],
        dtype=torch.float16)
-PREFERRED_KONTEXT_RESOLUTIONS = [
-    (672, 1568),
-    (688, 1504),
-    (720, 1456),
-    (752, 1392),
-    (800, 1328),
-    (832, 1248),
-    (880, 1184),
-    (944, 1104),
-    (1024, 1024),
-    (1104, 944),
-    (1184, 880),
-    (1248, 832),
-    (1328, 800),
-    (1392, 752),
-    (1456, 720),
-    (1504, 688),
-    (1568, 672),
-]
-
 
 def regione_init(model_path, device):
 
@@ -537,20 +518,21 @@ def RegionEFluxTransformer2DModelforward(
                 )
             else:
                 hidden_states = hidden_states + controlnet_block_samples[index_block // interval_control]
-    hidden_states = torch.cat([encoder_hidden_states, hidden_states], dim=1)
 
     for index_block, block in enumerate(self.single_transformer_blocks):
         if torch.is_grad_enabled() and self.gradient_checkpointing:
-            hidden_states = self._gradient_checkpointing_func(
+            encoder_hidden_states, hidden_states = self._gradient_checkpointing_func(
                 block,
                 hidden_states,
+                encoder_hidden_states,
                 temb,
                 image_rotary_emb,
             )
 
         else:
-            hidden_states = block(
+            encoder_hidden_states, hidden_states = block(
                 hidden_states=hidden_states,
+                encoder_hidden_states=encoder_hidden_states,
                 temb=temb,
                 image_rotary_emb=image_rotary_emb,
                 joint_attention_kwargs=joint_attention_kwargs,
@@ -564,8 +546,6 @@ def RegionEFluxTransformer2DModelforward(
                 hidden_states[:, encoder_hidden_states.shape[1] :, ...]
                 + controlnet_single_block_samples[index_block // interval_control]
             )
-
-    hidden_states = hidden_states[:, encoder_hidden_states.shape[1] :, ...]
 
     hidden_states = self.norm_out(hidden_states, temb)
     output = self.proj_out(hidden_states)

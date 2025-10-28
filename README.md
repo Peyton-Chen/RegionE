@@ -7,6 +7,7 @@
 
 <h2 align="center">
   <img src="assets/RegionE.gif" width="50" style="vertical-align: middle; margin-right: 10px;">
+
   <strong>RegionE: Adaptive Region-Aware Generation for Efficient Image Editing</strong>
 </h2>
 
@@ -15,7 +16,7 @@
 </div>
 
 ## 🥳 What's New 
-- [2025/10/15] 👋 Upload paper and init project. [Read]()
+- [2025/10/27] 👋 Upload paper and init project. [Read]()
 
 
 ## 🏃 Overview
@@ -57,17 +58,18 @@ pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https
 # For CUDA 12.4
 pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu124
 
-# 4. Install the latest version of diffusers
-# For FLUX.1 Kontext or Qwen-Image-Edit
-pip install git+https://github.com/huggingface/diffusers.git
-# For Step1X-Edit
-pip install git+https://github.com/Peyton-Chen/diffusers.git@step1xedit
-
-# 5. Install pip dependencies
+# 4. Install pip dependencies
 python -m pip install -r requirements.txt
 
+# 5. Install the latest version of diffusers
+# For Step1X-Edit
+pip install git+https://github.com/Peyton-Chen/diffusers.git@step1xedit
+# For FLUX.1 Kontext or Qwen-Image-Edit
+pip install git+https://github.com/huggingface/diffusers.git
+
+
 # 6. Install flash attention v2 (optional)
-python -m pip install git+https://github.com/Dao-AILab/flash-attention.git@v2.8.2
+python -m pip install git+https://github.com/Dao-AILab/flash-attention.git@v2.8.2 --no-build-isolation
 ```
 
 ## 🎯 Quick Start
@@ -83,14 +85,14 @@ python src/Step1X-Edit/main.py \
     --use_regione \
     --warmup_step 6 \
     --post_step 2 \
-    --refresh_step 16 \
+    --refresh_step "16" \
     --threshold 0.88 \
     --cache_threshold 0.02 \
     --erosion_dilation \
     --guidance_scale 6.0 \
     --seed 110 \
     --device cuda \
-    --image_path assets/data.json \
+    --image_path assets/data.jsonl \
     --output_dir result/Step1X-Edit/Demo/RegionE
 ```
 
@@ -102,14 +104,14 @@ python src/FluxKontext/main.py \
     --use_regione \
     --warmup_step 6 \
     --post_step 2 \
-    --refresh_step 16 \
+    --refresh_step "16" \
     --threshold 0.93 \
-    --cache_threshold 0.04 \
+    --cache_threshold 0.01 \
     --erosion_dilation \
     --guidance_scale 2.5 \
     --seed 110 \
     --device cuda \
-    --image_path assets/data.json \
+    --image_path assets/data.jsonl \
     --output_dir result/FluxKontext/Demo/RegionE
 ```
 
@@ -121,14 +123,14 @@ python src/Qwen-Image/main.py \
     --use_regione \
     --warmup_step 6 \
     --post_step 2 \
-    --refresh_step 16 \
+    --refresh_step "16" \
     --threshold 0.80 \
     --cache_threshold 0.03 \
     --erosion_dilation \
     --guidance_scale 4.0 \
     --seed 110 \
     --device cuda \
-    --image_path assets/data.json \
+    --image_path assets/data.jsonl \
     --output_dir result/Qwen-Image/Demo/RegionE
 ```
 ## 📝 Evaluation
@@ -159,7 +161,7 @@ python src/Step1X-Edit/main.py \
     --use_regione \
     --warmup_step 6 \
     --post_step 2 \
-    --refresh_step 16 \
+    --refresh_step "16" \
     --threshold 0.88 \
     --cache_threshold 0.02 \
     --erosion_dilation \
@@ -191,7 +193,7 @@ python src/FluxKontext/main.py \
     --use_regione \
     --warmup_step 6 \
     --post_step 2 \
-    --refresh_step 16 \
+    --refresh_step "16" \
     --threshold 0.93 \
     --cache_threshold 0.04 \
     --erosion_dilation \
@@ -222,7 +224,7 @@ python src/Qwen-Image/main.py \
     --use_regione \
     --warmup_step 6 \
     --post_step 2 \
-    --refresh_step 16 \
+    --refresh_step "16" \
     --threshold 0.80 \
     --cache_threshold 0.03 \
     --erosion_dilation \

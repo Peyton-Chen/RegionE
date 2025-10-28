@@ -3,12 +3,9 @@ import numpy as np
 import torch.nn.functional as F
 from typing import Optional, Union, List, Dict, Any, Callable, Tuple
 
-from diffusers import Step1XEditPipeline
-from diffusers.image_processor import PipelineImageInput
 from diffusers.models.embeddings import apply_rotary_emb
 from diffusers.models.transformers.transformer_step1x_edit import Step1XEditAttention
 from diffusers.models.modeling_outputs import Transformer2DModelOutput
-from diffusers.pipelines.step1x_edit import Step1XEditPipelineOutput
 from diffusers.schedulers import FlowMatchEulerDiscreteScheduler
 from diffusers.utils import (
     is_torch_xla_available,
@@ -24,6 +21,9 @@ from utils import (
     ids_gather,
     ids_scatter,
     token_selector,
+    PipelineImageInput,
+    Step1XEditPipelineOutput,
+    Step1XEditPipeline,
     FlowMatchEulerDiscreteSchedulerOutput
 )
 if is_torch_xla_available():
