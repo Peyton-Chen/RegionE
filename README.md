@@ -6,7 +6,7 @@
 
 
 <h2 align="center">
-  <img src="assets/RegionE.gif" width="50" style="vertical-align: middle; margin-right: 10px;">
+  <img src="assets/RegionE.gif" width="100" style="vertical-align: middle; margin-right: 10px;">
 
   <strong>RegionE: Adaptive Region-Aware Generation for Efficient Image Editing</strong>
 </h2>
@@ -17,6 +17,15 @@
 
 ## 🥳 What's New 
 - [2025/10/29] 👋 Upload paper and init project. [Read]()
+
+
+## 🎥 Demo
+
+
+https://github.com/user-attachments/assets/23cb6eda-6f2e-418d-8638-8de6c6aaf44d
+
+
+
 
 
 ## 🏃 Overview
