@@ -16,7 +16,7 @@
 </div>
 
 ## 🥳 What's New 
-- [2025/10/27] 👋 Upload paper and init project. [Read]()
+- [2025/10/29] 👋 Upload paper and init project. [Read]()
 
 
 ## 🏃 Overview
@@ -66,7 +66,6 @@ python -m pip install -r requirements.txt
 pip install git+https://github.com/Peyton-Chen/diffusers.git@step1xedit
 # For FLUX.1 Kontext or Qwen-Image-Edit
 pip install git+https://github.com/huggingface/diffusers.git
-
 
 # 6. Install flash attention v2 (optional)
 python -m pip install git+https://github.com/Dao-AILab/flash-attention.git@v2.8.2 --no-build-isolation
