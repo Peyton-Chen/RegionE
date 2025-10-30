@@ -16,7 +16,7 @@
 </div>
 
 ## 🥳 What's New 
-- [2025/10/29] 👋 Upload [paper]((https://arxiv.org/abs/2510.25590)) and init project. 
+- [2025/10/29] 👋 Upload [paper](https://arxiv.org/abs/2510.25590) and init project. 
 RegionE losslessly accelerates SOTA instruction-based image editing models, including Step1X-Edit, FLUX.1 Kontext, and Qwen-Image-Edit, achieving acceleration factors of **2.57×**, **2.41×**, and **2.06×**.
 
 
