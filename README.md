@@ -12,11 +12,11 @@
 </h2>
 
 <div align="center">
-<a href='https://arxiv.org/abs/2510.03065'><img src='https://img.shields.io/badge/arXiv-2510.03065-b31b1b.svg'></a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a href='https://arxiv.org/abs/2510.25590'><img src='https://img.shields.io/badge/arXiv-2510.25590-b31b1b.svg'></a> &nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 
 ## 🥳 What's New 
-- [2025/10/29] 👋 Upload paper and init project. [Read]()
+- [2025/10/29] 👋 Upload paper and init project. [Read](https://arxiv.org/abs/2510.25590)
 
 
 ## 🎥 Demo
@@ -317,7 +317,7 @@ We thank the following excellent open-source works: [Step1X-Edit](https://github
 @article{chen2025regione,
   title   = {RegionE: Adaptive Region-Aware Generation for Efficient Image Editing},
   author  = {Pengtao Chen and Xianfang Zeng and Maosen Zhao and Mingzhu Shen and Peng Ye and Bangyin Xiang and Zhibo Wang and Wei Cheng and Gang Yu and Tao Chen},
-  journal = {arXiv preprint arXiv:25xx.xxxx},
+  journal = {arXiv preprint arXiv:2510.25590},
   year    = {2025}
 }
 ```
