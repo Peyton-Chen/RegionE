@@ -5,18 +5,19 @@
 </div> -->
 
 
-<h2 align="center">
+<h3 align="center">
   <img src="assets/RegionE.gif" width="100" style="vertical-align: middle; margin-right: 10px;">
 
   <strong>RegionE: Adaptive Region-Aware Generation for Efficient Image Editing</strong>
-</h2>
+</h3>
 
 <div align="center">
 <a href='https://arxiv.org/abs/2510.25590'><img src='https://img.shields.io/badge/arXiv-2510.25590-b31b1b.svg'></a> &nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 
 ## 🥳 What's New 
-- [2025/10/29] 👋 Upload paper and init project. [Read](https://arxiv.org/abs/2510.25590)
+- [2025/10/29] 👋 Upload [paper]((https://arxiv.org/abs/2510.25590)) and init project. 
+RegionE losslessly accelerates SOTA instruction-based image editing models, including Step1X-Edit, FLUX.1 Kontext, and Qwen-Image-Edit, achieving acceleration factors of **2.57×**, **2.41×**, and **2.06×**.
 
 
 ## 🎥 Demo
