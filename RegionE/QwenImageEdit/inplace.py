@@ -10,6 +10,10 @@ from diffusers.models.attention_processor import Attention
 from diffusers.models.modeling_outputs import Transformer2DModelOutput
 from diffusers.pipelines.qwenimage import QwenImagePipelineOutput
 from diffusers.schedulers import FlowMatchEulerDiscreteScheduler
+from diffusers.models.transformers.transformer_qwenimage import (
+    QwenDoubleStreamAttnProcessor2_0,
+    QwenImageTransformer2DModel,
+)
 from diffusers.utils import (
     is_torch_xla_available,
     logging,
@@ -17,11 +21,11 @@ from diffusers.utils import (
     scale_lora_layers,
     unscale_lora_layers,
 )
-from utils import (
+from .utils import (
     calculate_dimensions,
     calculate_shift,
     retrieve_timesteps,
-    MANAGER,
+    QwenImageEditManager,
     ids_gather,
     ids_scatter,
     token_selector,
@@ -37,25 +41,31 @@ try:
     from flash_attn import flash_attn_func
 except ImportError:
     flash_attn = False
-from fused_kernels import _partially_linear
-
+from .fused_kernels import _partially_linear
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 gamma = torch.tensor([1.0195, 1.0233, 1.0243, 1.0185, 1.0321, 1.0208, 1.0260, 1.0233, 1.0258,
         1.0292, 1.0316, 1.0306, 1.0289, 1.0347, 1.0329, 1.0402, 1.0378, 1.0384,
         1.0413, 1.0444, 1.0526, 1.0400, 1.0555, 1.0439, 1.0357, 1.0118, 0.7603],
        dtype=torch.float16)
+MANAGER = QwenImageEditManager()
 
-
-def regione_init(model_path, device):
-
-    pipeline = RegionEQwenImageEditPipeline.from_pretrained(model_path, torch_dtype=torch.bfloat16)
+def warp_modules(pipeline, **args):
+    MANAGER.set_parameters(args)
+    pipeline.__class__ = RegionEQwenImageEditPipeline
     pipeline.scheduler = RegionEFlowMatchEulerDiscreteScheduler.from_config(pipeline.scheduler.config)
     pipeline.transformer.forward = RegionEQwenImageTransformer2DModelforward.__get__(pipeline.transformer, pipeline.transformer.__class__)
     for block in pipeline.transformer.transformer_blocks:
         block.attn.set_processor(RegionEQwenDoubleStreamAttnProcessor2_0(False))
-    return pipeline.to(device)
+    return pipeline
 
+def unwarp_modules(pipeline):
+    pipeline.__class__ = QwenImageEditPipeline
+    pipeline.scheduler = FlowMatchEulerDiscreteScheduler.from_config(pipeline.scheduler.config)
+    pipeline.transformer.forward = QwenImageTransformer2DModel.forward.__get__(pipeline.transformer, pipeline.transformer.__class__)
+    for block in pipeline.transformer.transformer_blocks:
+        block.attn.set_processor(QwenDoubleStreamAttnProcessor2_0())
+    return pipeline
 
 class RegionEQwenImageEditPipeline(QwenImageEditPipeline):
 
@@ -167,6 +177,7 @@ class RegionEQwenImageEditPipeline(QwenImageEditPipeline):
             [`~pipelines.qwenimage.QwenImagePipelineOutput`] if `return_dict` is True, otherwise a `tuple`. When
             returning a tuple, the first element is a list with the generated images.
         """
+        assert num_inference_steps == MANAGER.inference_step, "num_inference_steps should be equal to 28"
         image_size = image[0].size if isinstance(image, list) else image.size
         calculated_width, calculated_height, _ = calculate_dimensions(1024 * 1024, image_size[0] / image_size[1])
         height = height or calculated_height

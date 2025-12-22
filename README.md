@@ -16,6 +16,8 @@
 </div>
 
 ## 🥳 What's New 
+- [2025/12/22] Release the PyPi Package.
+- [2025/12/22] Release the code for Step1X-Edit-v1p2 and Qwen-Image-Edit-2509.
 - [2025/10/29] 👋 Upload [paper](https://arxiv.org/abs/2510.25590) and init project. 
 RegionE losslessly accelerates SOTA instruction-based image editing models, including Step1X-Edit, FLUX.1 Kontext, and Qwen-Image-Edit, achieving acceleration factors of **2.57×**, **2.41×**, and **2.06×**.
 
@@ -72,10 +74,7 @@ pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https
 python -m pip install -r requirements.txt
 
 # 5. Install the latest version of diffusers
-# For Step1X-Edit
-pip install git+https://github.com/Peyton-Chen/diffusers.git@step1xedit
-# For FLUX.1 Kontext or Qwen-Image-Edit
-pip install git+https://github.com/huggingface/diffusers.git
+pip install git+https://github.com/Peyton-Chen/diffusers.git@step1xedit_v1p2
 
 # 6. Install flash attention v2 (optional)
 python -m pip install git+https://github.com/Dao-AILab/flash-attention.git@v2.8.2 --no-build-isolation

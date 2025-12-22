@@ -3,13 +3,17 @@ import numpy as np
 import torch.nn.functional as F
 from typing import Optional, Union, List, Dict, Any, Callable, Tuple
 
-from diffusers import QwenImageEditPipeline
+from diffusers import QwenImageEditPlusPipeline
 from diffusers.image_processor import PipelineImageInput
 from diffusers.models.transformers.transformer_qwenimage import apply_rotary_emb_qwen
 from diffusers.models.attention_processor import Attention
 from diffusers.models.modeling_outputs import Transformer2DModelOutput
 from diffusers.pipelines.qwenimage import QwenImagePipelineOutput
 from diffusers.schedulers import FlowMatchEulerDiscreteScheduler
+from diffusers.models.transformers.transformer_qwenimage import (
+    QwenDoubleStreamAttnProcessor2_0, 
+    QwenImageTransformer2DModel,
+)
 from diffusers.utils import (
     is_torch_xla_available,
     logging,
@@ -17,14 +21,14 @@ from diffusers.utils import (
     scale_lora_layers,
     unscale_lora_layers,
 )
-from utils import (
+from .utils import (
     calculate_dimensions,
     calculate_shift,
     retrieve_timesteps,
-    MANAGER,
     ids_gather,
     ids_scatter,
     token_selector,
+    QwenImageEditPlusManager,
     FlowMatchEulerDiscreteSchedulerOutput
 )
 if is_torch_xla_available():
@@ -37,27 +41,36 @@ try:
     from flash_attn import flash_attn_func
 except ImportError:
     flash_attn = False
-from fused_kernels import _partially_linear
-
+from .fused_kernels import _partially_linear
 
 logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
-gamma = torch.tensor([1.0195, 1.0233, 1.0243, 1.0185, 1.0321, 1.0208, 1.0260, 1.0233, 1.0258,
-        1.0292, 1.0316, 1.0306, 1.0289, 1.0347, 1.0329, 1.0402, 1.0378, 1.0384,
-        1.0413, 1.0444, 1.0526, 1.0400, 1.0555, 1.0439, 1.0357, 1.0118, 0.7603],
+gamma = torch.tensor([1.0186, 1.0241, 1.0236, 1.0205, 1.0298, 1.0221, 1.0248, 1.0246, 1.0269,
+        1.0275, 1.0323, 1.0311, 1.0298, 1.0353, 1.0343, 1.0397, 1.0387, 1.0393,
+        1.0404, 1.0458, 1.0507, 1.0418, 1.0518, 1.0426, 1.0311, 1.0068, 0.7628],
        dtype=torch.float16)
+MANAGER = QwenImageEditPlusManager()
 
+CONDITION_IMAGE_SIZE = 384 * 384
+VAE_IMAGE_SIZE = 1024 * 1024
 
-def regione_init(model_path, device):
-
-    pipeline = RegionEQwenImageEditPipeline.from_pretrained(model_path, torch_dtype=torch.bfloat16)
+def warp_modules(pipeline, **args):
+    MANAGER.set_parameters(args)
+    pipeline.__class__ = RegionEQwenImageEditPlusPipeline
     pipeline.scheduler = RegionEFlowMatchEulerDiscreteScheduler.from_config(pipeline.scheduler.config)
     pipeline.transformer.forward = RegionEQwenImageTransformer2DModelforward.__get__(pipeline.transformer, pipeline.transformer.__class__)
     for block in pipeline.transformer.transformer_blocks:
         block.attn.set_processor(RegionEQwenDoubleStreamAttnProcessor2_0(False))
-    return pipeline.to(device)
+    return pipeline
 
+def unwarp_modules(pipeline):
+    pipeline.__class__ = QwenImageEditPlusPipeline
+    pipeline.scheduler = FlowMatchEulerDiscreteScheduler.from_config(pipeline.scheduler.config)
+    pipeline.transformer.forward = QwenImageTransformer2DModel.forward.__get__(pipeline.transformer, pipeline.transformer.__class__)
+    for block in pipeline.transformer.transformer_blocks:
+        block.attn.set_processor(QwenDoubleStreamAttnProcessor2_0())
+    return pipeline
 
-class RegionEQwenImageEditPipeline(QwenImageEditPipeline):
+class RegionEQwenImageEditPlusPipeline(QwenImageEditPlusPipeline):
 
     @torch.no_grad()
     def __call__(
@@ -89,6 +102,12 @@ class RegionEQwenImageEditPipeline(QwenImageEditPipeline):
         Function invoked when calling the pipeline for generation.
 
         Args:
+            image (`torch.Tensor`, `PIL.Image.Image`, `np.ndarray`, `List[torch.Tensor]`, `List[PIL.Image.Image]`, or `List[np.ndarray]`):
+                `Image`, numpy array or tensor representing an image batch to be used as the starting point. For both
+                numpy array and pytorch tensor, the expected value range is between `[0, 1]` If it's a tensor or a list
+                or tensors, the expected shape should be `(B, C, H, W)` or `(C, H, W)`. If it is a numpy array or a
+                list of arrays, the expected shape should be `(B, H, W, C)` or `(H, W, C)` It can also accept image
+                latents as `image`, but if passing latents directly it is not encoded again.
             prompt (`str` or `List[str]`, *optional*):
                 The prompt or prompts to guide the image generation. If not defined, one has to pass `prompt_embeds`.
                 instead.
@@ -167,8 +186,9 @@ class RegionEQwenImageEditPipeline(QwenImageEditPipeline):
             [`~pipelines.qwenimage.QwenImagePipelineOutput`] if `return_dict` is True, otherwise a `tuple`. When
             returning a tuple, the first element is a list with the generated images.
         """
-        image_size = image[0].size if isinstance(image, list) else image.size
-        calculated_width, calculated_height, _ = calculate_dimensions(1024 * 1024, image_size[0] / image_size[1])
+        assert num_inference_steps == MANAGER.inference_step, "inference step mismatch"
+        image_size = image[-1].size if isinstance(image, list) else image.size
+        calculated_width, calculated_height = calculate_dimensions(1024 * 1024, image_size[0] / image_size[1])
         height = height or calculated_height
         width = width or calculated_width
 
@@ -206,10 +226,22 @@ class RegionEQwenImageEditPipeline(QwenImageEditPipeline):
         device = self._execution_device
         # 3. Preprocess image
         if image is not None and not (isinstance(image, torch.Tensor) and image.size(1) == self.latent_channels):
-            image = self.image_processor.resize(image, calculated_height, calculated_width)
-            prompt_image = image
-            image = self.image_processor.preprocess(image, calculated_height, calculated_width)
-            image = image.unsqueeze(2)
+            if not isinstance(image, list):
+                image = [image]
+            condition_image_sizes = []
+            condition_images = []
+            vae_image_sizes = []
+            vae_images = []
+            for img in image:
+                image_width, image_height = img.size
+                condition_width, condition_height = calculate_dimensions(
+                    CONDITION_IMAGE_SIZE, image_width / image_height
+                )
+                vae_width, vae_height = calculate_dimensions(VAE_IMAGE_SIZE, image_width / image_height)
+                condition_image_sizes.append((condition_width, condition_height))
+                vae_image_sizes.append((vae_width, vae_height))
+                condition_images.append(self.image_processor.resize(img, condition_height, condition_width))
+                vae_images.append(self.image_processor.preprocess(img, vae_height, vae_width).unsqueeze(2))
 
         has_neg_prompt = negative_prompt is not None or (
             negative_prompt_embeds is not None and negative_prompt_embeds_mask is not None
@@ -226,7 +258,7 @@ class RegionEQwenImageEditPipeline(QwenImageEditPipeline):
 
         do_true_cfg = true_cfg_scale > 1 and has_neg_prompt
         prompt_embeds, prompt_embeds_mask = self.encode_prompt(
-            image=prompt_image,
+            image=condition_images,
             prompt=prompt,
             prompt_embeds=prompt_embeds,
             prompt_embeds_mask=prompt_embeds_mask,
@@ -236,7 +268,7 @@ class RegionEQwenImageEditPipeline(QwenImageEditPipeline):
         )
         if do_true_cfg:
             negative_prompt_embeds, negative_prompt_embeds_mask = self.encode_prompt(
-                image=prompt_image,
+                image=condition_images,
                 prompt=negative_prompt,
                 prompt_embeds=negative_prompt_embeds,
                 prompt_embeds_mask=negative_prompt_embeds_mask,
@@ -248,7 +280,7 @@ class RegionEQwenImageEditPipeline(QwenImageEditPipeline):
         # 4. Prepare latent variables
         num_channels_latents = self.transformer.config.in_channels // 4
         latents, image_latents = self.prepare_latents(
-            image,
+            vae_images,
             batch_size * num_images_per_prompt,
             num_channels_latents,
             height,
@@ -258,11 +290,13 @@ class RegionEQwenImageEditPipeline(QwenImageEditPipeline):
             generator,
             latents,
         )
-
         img_shapes = [
             [
                 (1, height // self.vae_scale_factor // 2, width // self.vae_scale_factor // 2),
-                (1, calculated_height // self.vae_scale_factor // 2, calculated_width // self.vae_scale_factor // 2),
+                *[
+                    (1, vae_height // self.vae_scale_factor // 2, vae_width // self.vae_scale_factor // 2)
+                    for vae_width, vae_height in vae_image_sizes
+                ],
             ]
         ] * batch_size
 
@@ -491,6 +525,8 @@ def RegionEQwenImageTransformer2DModelforward(
         lora_scale = attention_kwargs.pop("scale", 1.0)
     else:
         lora_scale = 1.0
+
+    tag = attention_kwargs.get('tag')
 
     if USE_PEFT_BACKEND:
         # weight the lora layers by setting `lora_scale` for each PEFT layer

@@ -13,7 +13,7 @@ python src/FluxKontext/main.py \
     --seed 110 \
     --device cuda \
     --image_path assets/data.jsonl \
-    --output_dir result/FluxKontext/Demo1/RegionE
+    --output_dir result/FluxKontext/Demo/RegionE
 
 # Evaluation script for FLUX.1 Kontext
 python src/FluxKontext/main.py \
