@@ -13,10 +13,11 @@
 
 <div align="center">
 <a href='https://arxiv.org/abs/2510.25590'><img src='https://img.shields.io/badge/arXiv-2510.25590-b31b1b.svg'></a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a href='https://pypi.org/project/RegionE/'><img src='https://img.shields.io/badge/PyPi-RegionE-blue'></a> &nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 
 ## 🥳 What's New 
-- [2025/12/22] Release the PyPi Package.
+- [2025/12/22] Release the [PyPi Package](https://pypi.org/project/RegionE/). 
 - [2025/12/22] Release the code for Step1X-Edit-v1p2 and Qwen-Image-Edit-2509.
 - [2025/10/29] 👋 Upload [paper](https://arxiv.org/abs/2510.25590) and init project. 
 RegionE losslessly accelerates SOTA instruction-based image editing models, including Step1X-Edit, FLUX.1 Kontext, and Qwen-Image-Edit, achieving acceleration factors of **2.57×**, **2.41×**, and **2.06×**.
@@ -26,7 +27,6 @@ RegionE losslessly accelerates SOTA instruction-based image editing models, incl
 
 
 https://github.com/user-attachments/assets/23cb6eda-6f2e-418d-8638-8de6c6aaf44d
-
 
 
 
@@ -81,11 +81,48 @@ python -m pip install git+https://github.com/Dao-AILab/flash-attention.git@v2.8.
 ```
 
 ## 🎯 Quick Start
+
+### Diffusers Plugin Usage
+Below is the usage of RegionE as a Diffusers plugin, using Step1X-Edit-v1p1 as an example. For usage with other models, please refer to the [`RegionE/`](./RegionE) directory.
+
+```python
+import torch
+from diffusers import Step1XEditPipeline
+from diffusers.utils import load_image
+from RegionE import RegionEHelper
+
+# Loading the original pipeline
+pipeline = Step1XEditPipeline.from_pretrained("stepfun-ai/Step1X-Edit-v1p1-diffusers", torch_dtype=torch.bfloat16)
+pipeline.to("cuda")
+
+# Import the RegionEHelper
+regionehelper = RegionEHelper(pipeline)
+regionehelper.set_params()   # default hyperparameter
+regionehelper.enable()
+
+# Generate Image
+image = load_image("demo_0.png").convert("RGB")
+prompt = "Replace the text 'SUMMER' with 'WINTER'"
+image = pipeline(
+    image=image,
+    prompt=prompt,
+    num_inference_steps=28,
+    true_cfg_scale=6.0,
+    generator=torch.Generator().manual_seed(42),
+).images[0]
+image.save("step1xeditv1p1_output_image_edit.jpg")
+
+regionehelper.disable()
+```
+
+
+
+### Experimental code for RegionE
 You can directly run the provided demo scripts under the [`scripts/`](./scripts) directory.
 
 Alternatively, you can manually run the example command below:
 
-### Step1X-Edit [🤗[Download Pretrained Model](https://huggingface.co/stepfun-ai/Step1X-Edit-v1p1-diffusers) ] 
+#### Step1X-Edit [🤗[Download Pretrained Model](https://huggingface.co/stepfun-ai/Step1X-Edit-v1p1-diffusers) ] 
 ```bash
 python src/Step1X-Edit/main.py \
     --model_path stepfun-ai/Step1X-Edit-v1p1-diffusers \
@@ -104,7 +141,7 @@ python src/Step1X-Edit/main.py \
     --output_dir result/Step1X-Edit/Demo/RegionE
 ```
 
-### FLUX.1 Kontext [🤗[Download Pretrained Model](https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev) ] 
+#### FLUX.1 Kontext [🤗[Download Pretrained Model](https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev) ] 
 ```bash
 python src/FluxKontext/main.py \
     --model_path black-forest-labs/FLUX.1-Kontext-dev \
@@ -123,7 +160,7 @@ python src/FluxKontext/main.py \
     --output_dir result/FluxKontext/Demo/RegionE
 ```
 
-### Qwen-Image-Edit [🤗[Download Pretrained Model](https://huggingface.co/Qwen/Qwen-Image-Edit) ] 
+#### Qwen-Image-Edit [🤗[Download Pretrained Model](https://huggingface.co/Qwen/Qwen-Image-Edit) ] 
 ```bash
 python src/Qwen-Image/main.py \
     --model_path Qwen/Qwen-Image-Edit \
