@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG" />
+  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG" />
+  <meta property="og:url" content="URL OF THE WEBSITE" />
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+
+  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>RegionE</title>
+  <link rel="icon" type="image/x-icon" href="static/images/regionelogo.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+
+  <style>
+    /* Mobile responsive styles */
+    @media screen and (max-width: 768px) {
+      .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .hero-body {
+        padding: 2rem 1rem;
+      }
+
+      .title.is-1 {
+        font-size: 2rem !important;
+      }
+
+      .title.is-3 {
+        font-size: 1.5rem !important;
+      }
+
+      .publication-title {
+        font-size: 1.8rem !important;
+        line-height: 1.2;
+      }
+
+      .publication-authors {
+        font-size: 0.9rem;
+      }
+
+      .button {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+      }
+
+      .results-carousel .item {
+        padding: 10px;
+      }
+
+      .publication-video {
+        margin: 1rem 0;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+</head>
+
+<body>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-2 publication-title">RegionE: <br> 
+            Adaptive Region-Aware Generation for Efficient Image Editing
+            </h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=fnYKT-gAAAAJ&hl=zh-CN" target="_blank">Pengtao Chen</a><sup>1,2</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=tgDc0fsAAAAJ&hl=zh-CN" target="_blank">Xianfang Zeng</a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="blank" target="_blank">Maosen Zhao</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=o7vrw6IAAAAJ&hl=zh-CN" target="_blank">Mingzhu Shen</a><sup>3</sup>,
+              </span>
+              <span class="author-block">
+                <a href="blank" target="_blank">Peng Ye</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="blank" target="_blank">Bangyin Xiang</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?hl=zh-CN&user=PwKIzPAAAAAJ" target="_blank">Zhibo Wang</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?hl=zh-CN&user=OC8eBkYAAAAJ" target="_blank">Wei Cheng</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=BJdigYsAAAAJ&hl=zh-CN" target="_blank">Gang Yu</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=w3OoFL0AAAAJ&hl=zh-CN" target="_blank">Tao Chen</a><sup>1,4</sup>,
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup> Fudan University</span>
+              <span class="author-block"><sup>2</sup> StepFun</span>
+              <span class="author-block"><sup>3</sup> Imperial College London</span>
+              <span class="author-block"><sup>4</sup> Shanghai Innovation Institute</span>
+              <br><span style="color: #dc2626; font-weight: bold;">Accepted by ICLR 2026</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- Arxiv PDF link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2510.25590" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+
+                <!-- Github link -->
+                <span class="link-block">
+                  <a href="https://github.com/Peyton-Chen/RegionE/" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- ArXiv abstract Link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2510.25590" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+
+                <!-- PyPi link -->
+                <span class="link-block">
+                  <a href="https://pypi.org/project/RegionE/" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-python"></i>
+                    </span>
+                    <span>PyPi</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-4">TL;DR</h2>
+          <div class="content has-text-justified">
+            <p>
+              Announcing RegionE, a training-free method that losslessly accelerates SOTA instruction-based 
+              image editing models, including Qwen-Image-Edit, FLUX.1-Kontext, and Step1X-Edit, 
+              achieving <strong>acceleration factors of 2-3×</strong>. 
+              The key lies in exploiting the <strong> spatial redundancy and timestep-wise redundancy</strong> in the image editing process. <strong>With simple pip installation, acceleration can be achieved in just four lines of code.</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Teaser video-->
+  <section class="hero teaser">
+    <div class="container">
+      <div class="hero-body">
+        <video poster="" id="tree" autoplay controls muted loop height="100%">
+          <!-- Your video here -->
+          <source src="assets/video/DemoFast.mp4" type="video/mp4">
+        </video>
+        <h2 class="subtitle has-text-centered">
+          RegionE preserves high pixel fidelity despite a 2–3× speedup.
+        </h2>
+      </div>
+    </div>
+  </section>
+  <!-- End teaser video -->
+
+  <!-- Paper motivation -->
+  <section class="section hero is-light">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-4">Motivation</h2>
+          <div class="content has-text-justified">
+            <p>
+            💡<strong>Most instruction-based image edits affect only local regions</strong>, 
+            yet existing models regenerate the entire image, wasting computation on unedited areas. 
+            This made us wonder: can full-image editing models be adapted to generate only the regions that matter,
+             boosting editing efficiency?
+            <div class="container has-text-centered">
+              <figure class="image is-inline-block" style="width: 100%;">
+                <img src="assets/Motivation.png" alt="Attention Portion Figure">
+                <figcaption style="font-size: 0.8em; color: gray;">
+                  Figure: Some examples of instruction-based image editing.
+                </figcaption>
+              </figure>
+            </div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- End paper motivation -->
+
+  <!-- Deep Insights into Edited and Unedited Regions -->
+  <section class="section hero">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-4">Deep Insights into Edited and Unedited Region</h2>
+          <div class="content has-text-justified">
+            <p>
+              
+            Instruction-based image editing involves two distinct regions: the Edited Region (changes) and the Unedited Region (consistency).
+            Our research reveals a fundamental divergence in the underlying generation process of these two regions:
+            
+            <ul style="list-style-position: inside;">
+              <li><strong>Unedited Region:</strong> These follow straight trajectory, enabling early velocity estimates to accurately predict the final result in a single step.</li>
+              <li><strong>Edited Region:</strong> These exhibit curved trajectory, rendering early estimates unreliable 
+                and necessitating iterative denoising for precision.</li>
+              <li><strong>Temporal Consistency:</strong> Across both regions, velocity remains highly consistent.
+                between adjacent timesteps.</li>
+            </ul>
+
+            <div class="container has-text-centered">
+              <figure class="image is-inline-block" style="width: 100%;">
+                <img src="assets/teasor.png" alt="Attention Portion Figure">
+                <figcaption style="font-size: 0.8em; color: gray;">
+                  Figure: The generation trajectories of edited and unedited regions exhibit noticeable differences.</figcaption>
+              </figure>
+            </div>
+            </p>
+            
+            
+            <p>
+              The video below demonstrates one-step predictions of the final edited image using velocity from 
+              different denosing timesteps. Consistent with our trajectory analysis, unedited regions are accurately predicted early
+              due to their straight trajectory, whereas edited regions require more iterations to resolve, confirming the necessity of 
+              distinct processing for their complex, curved generative trajectories.
+            </p>
+
+            <div class="video-container" style="margin-top: 20px;">
+              <video 
+                id="algorithm-demo" 
+                autoplay controls muted loop
+                style="width: 100%; height: auto; display: block; margin: 0 auto; border-radius: 8px;"
+              >
+                <source src="assets/video/Estimate_velocity.mp4" type="video/mp4">
+              </video>
+              <div class="has-text-centered" style="margin-top: 8px;"> <p style="font-size: 0.8em; color: gray; width: 80%; margin: 0 auto; font-style: italic;">
+                  Video: One-step predictions of the final edited image using velocity from different denoising timesteps.
+                </p>
+              </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Method -->
+  <section class="section hero is-light">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-4">Method</h2>
+          <div class="content has-text-justified">
+            <p>
+              RegionE is a plug-and-play acceleration framework that exploits internal mechanisms of pretrained models to distinguish edited from unedited image regions, and applies region-specific acceleration strategies accordingly. Its workflow consists of three stages:
+            </p>
+            
+            <div class="columns is-centered">
+              <figure class="image is-inline-block" style="width: 80%;">
+                <img src="assets/Method.png" alt="Image 2">
+                <figcaption style="font-size: 0.8em; color: gray;">Figure: Overview of the RegionE.</figcaption>
+              </figure>
+            </div>
+
+            <ol>
+              <li>
+                <strong>Stabilization Stage (STS): Regional Identification</strong>
+                <p>The goal of this stage is to differentiate between edited and unedited regions.
+              
+                <ul>
+                  <li>
+                    <strong>Adaptive Region Partition (ARP)</strong>: We propose ARP, which generates an estimated edited image through a one-step denoising process. Cosine similarity between this estimate and the reference image is then used to classify regions with high similarity as unedited and those with low similarity as edited.
+                  </li>
+                  <li>
+                    <strong>RIKV-Cache Preservation</strong>: Due to the low signal-to-noise ratio of the initial image fed into DiT, early estimates may be inaccurate. Therefore, we do not apply any operations at these timesteps to ensure stability. At its final timestep, ARP is applied to finalize the regional mask, and the Key–Value states of the unedited regions and the reference image in the DiT attention layers are cached.
+                  </li>
+                </ul>
+                </p>
+              </li>
+
+              <li>
+                <strong>Region-Aware Generation Stage (RAGS): Differentiated Acceleration</strong>
+                <p>In this stage, different acceleration strategies are applied based on the identified regions:
+
+                <ul>
+                  <li>
+                  <strong>Unedited Region</strong>: These areas utilize one-step estimation to generate results.
+                  </li>
+
+                  <li>
+                  <strong>Edited Region</strong>: These regions follow the iterative denoising process. To maintain global context, information from the unedited regions and the reference image are injected into the attention mechanism via Region-Instruction KV Cache (RIKVCache). To further boost speed, we leverage the similarity between consecutive timesteps using Adaptive Velocity Decay Cache (AVDCache).
+                  </li>
+                </ul>
+                </p>
+              </li>
+
+              <li>
+                <strong>Smoothing Stage (SMS): Boundary Refinement</strong>
+                <p>To ensure visual consistency, this final stage eliminates any visible boundaries between the edited and unedited regions. Specifically, no modifications are applied to the denoising process in the last few timesteps.
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quantitive Results -->
+  <section class="section hero">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-4">Quantitive Results</h2>
+          <div class="content has-text-justified">
+            <p>
+              RegionE is compatible with models such as Qwen-Image-Edit, FLUX.1-Kontext, and Step1X-Edit. Evaluated 
+              on GEdit-Bench and Kontext-Bench, it achieves an overall 2–3x lossless acceleration.
+            </p>
+
+            <div class="columns is-centered">
+              <figure class="image is-inline-block" style="width: 80%;">
+                <img src="assets/Result.png" alt="Image 2">
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <!-- Qualitative Results -->
+<section class="section hero is-light" id="qualitative-results">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-10-widescreen is-11-desktop">
+        
+        <div class="mb-6">
+          <h2 class="title is-4 is-spaced has-text-weight-bold">Qualitative Results</h2>
+            <p>
+              The following showcases demonstrate RegionE's broad applicability. 
+              Select a model and an editing task to explore the performance.
+              The following examples are randomly sampled from GEdit-Bench and Kontext-Bench, with editing speedups of 2–3×.
+            </p>
+        </div>
+
+        <div class="control-panel-wrapper">
+          
+          <div class="model-tabs-container mb-5">
+              <div class="model-tabs" id="model-selector">
+                <button class="model-tab active" data-value="step1x">
+                  <span class="icon is-medium">
+                    <img src="static/images/step_icon.png" alt="Step Icon"> 
+                  </span>
+                  <span>Step1X-Edit</span>
+                </button>
+
+                <button class="model-tab" data-value="flux">
+                  <span class="icon is-medium">
+                    <img src="static/images/flux_icon.png" alt="Flux Icon">
+                  </span>
+                  <span>FLUX.1-Kontext</span>
+                </button>
+
+                <button class="model-tab" data-value="qwen">
+                  <span class="icon is-3">
+                    <img src="static/images/qwen_icon.png" alt="Qwen Icon">
+                  </span>
+                  <span>Qwen-Image-Edit</span>
+                </button>
+
+              </div>
+            </div>
+
+          <div class="task-pills-container mb-6">
+            <div class="task-pills" id="task-selector">
+              </div>
+          </div>
+        </div>
+
+        <div class="display-stage">
+          <div class="loading-overlay" id="loading-spinner">
+            <div class="loader-circle"></div>
+          </div>
+          
+          <figure class="image result-figure">
+            <img id="result-image" src="" alt="Editing Result" draggable="false">
+          </figure>
+          
+          <div class="caption-bar">
+            <span class="tag is-light is-rounded" id="model-tag">Model</span>
+            <span class="divider">/</span>
+            <span class="has-text-weight-medium" id="task-tag">Task</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <style>
+    :root {
+      --primary-color: #4a90e2; 
+      --active-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+      --card-bg: #ffffff;
+      --transition-speed: 0.3s;
+    }
+
+    /* 1. Model Tabs */
+    .model-tabs-container {
+      display: flex;
+      justify-content: center;
+    }
+    .model-tabs {
+      background: #e3e7ed;
+      padding: 6px;
+      border-radius: 16px;
+      display: inline-flex;
+      gap: 4px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+    }
+    .model-tab {
+      border: none;
+      background: transparent;
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      color: #6e7687;
+      cursor: pointer;
+      transition: all var(--transition-speed) ease;
+      display: flex;
+      align-items: center;
+      gap: 10px; /* Space between icon and text */
+      font-size: 0.95rem;
+    }
+    .model-tab:hover {
+      color: #333;
+      background: rgba(255,255,255,0.5);
+    }
+    .model-tab.active {
+      background: #fff;
+      color: var(--primary-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transform: scale(1.02);
+    }
+
+    /* 2. Task Pills */
+    .task-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .task-btn {
+      border: 1px solid #e0e0e0;
+      background: #fff;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px; /* Space between icon and text */
+    }
+    .task-btn i {
+      font-size: 0.9em; /* Icon slightly smaller than text */
+      opacity: 0.7;
+    }
+    .task-btn:hover {
+      border-color: #bbb;
+      transform: translateY(-1px);
+      color: #333;
+    }
+    .task-btn:hover i { opacity: 1; }
+    
+    .task-btn.active {
+      background: linear-gradient(135deg, #4a90e2, #357abd);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 10px rgba(53, 122, 189, 0.3);
+    }
+    .task-btn.active i { opacity: 1; color: #fff; }
+
+    /* 3. Display Stage */
+    .display-stage {
+      background: #fff;
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      min-height: 200px;
+    }
+    .result-figure img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+      transition: opacity 0.3s ease-in-out;
+    }
+    .result-figure img.fading {
+      opacity: 0.4;
+      filter: blur(2px);
+    }
+    .caption-bar {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #4a4a4a;
+    }
+    .divider { color: #ccc; }
+
+    /* Loading Spinner */
+    .loading-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255,255,255,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      backdrop-filter: blur(2px);
+    }
+    .loading-overlay.active { display: flex; }
+    .loader-circle {
+      width: 40px; height: 40px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      
+      // Configuration with Icon Mappings
+      const CONFIG = {
+        models: {
+          'step1x': { name: 'Step1X-Edit', tasksType: 'groupA' },
+          'flux':   { name: 'FLUX.1-Kontext',   tasksType: 'groupB' },
+          'qwen':   { name: 'Qwen-Image-Edit',  tasksType: 'groupA' }
+        },
+        taskGroups: {
+          'groupA': [ // 11 Tasks
+            { name: 'Background Change', icon: 'fa-image' },
+            { name: 'Color Alter',       icon: 'fa-palette' },
+            { name: 'Material Alter',    icon: 'fa-cubes' },
+            { name: 'Motion Change',     icon: 'fa-person-running' },
+            { name: 'Ps Human',          icon: 'fa-user-pen' },
+            { name: 'Style Change',      icon: 'fa-paintbrush' },
+            { name: 'Subject Add',       icon: 'fa-circle-plus' },
+            { name: 'Subject Remove',    icon: 'fa-eraser' },
+            { name: 'Subject Replace',   icon: 'fa-rotate' },
+            { name: 'Text Change',       icon: 'fa-font' },
+            { name: 'Tone Transfer',     icon: 'fa-sliders' }
+          ],
+          'groupB': [ // 5 Tasks
+            { name: 'Character Reference',        icon: 'fa-address-card' },
+            { name: 'Style Reference',            icon: 'fa-swatchbook' },
+            { name: 'Text Editing',               icon: 'fa-pen-to-square' },
+            { name: 'Instruction Editing - Global', icon: 'fa-globe' },
+            { name: 'Instruction Editing - Local',  icon: 'fa-location-crosshairs' }
+          ]
+        },
+        basePath: 'assets/results'
+      };
+
+      // State
+      let state = {
+        model: 'step1x',
+        task: CONFIG.taskGroups.groupA[0].name // Default to first task name
+      };
+
+      // Elements
+      const els = {
+        modelBtns: document.querySelectorAll('#model-selector .model-tab'),
+        taskContainer: document.getElementById('task-selector'),
+        img: document.getElementById('result-image'),
+        spinner: document.getElementById('loading-spinner'),
+        modelTag: document.getElementById('model-tag'),
+        taskTag: document.getElementById('task-tag')
+      };
+
+      // Initialization
+      function init() {
+        bindModelEvents();
+        renderTasks(state.model);
+        updateView(true);
+      }
+
+      // Handle Model Switching
+      function bindModelEvents() {
+        els.modelBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const newModel = btn.dataset.value;
+            if (newModel === state.model) return;
+
+            // UI Update
+            els.modelBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Logic Update
+            state.model = newModel;
+            const groupType = CONFIG.models[newModel].tasksType;
+            state.task = CONFIG.taskGroups[groupType][0].name; // Reset to first task of new group
+            
+            renderTasks(state.model);
+            updateView();
+          });
+        });
+      }
+
+      // Render Task Buttons with Icons
+      function renderTasks(modelKey) {
+        const groupType = CONFIG.models[modelKey].tasksType;
+        const tasks = CONFIG.taskGroups[groupType];
+        
+        els.taskContainer.innerHTML = '';
+        
+        tasks.forEach(taskObj => {
+          const btn = document.createElement('button');
+          const isActive = taskObj.name === state.task;
+          btn.className = `task-btn ${isActive ? 'active' : ''}`;
+          
+          // Create Icon + Text HTML
+          btn.innerHTML = `
+            <span class="icon"><i class="fa-solid ${taskObj.icon}"></i></span>
+            <span>${taskObj.name}</span>
+          `;
+          
+          btn.addEventListener('click', () => {
+             if (state.task === taskObj.name) return;
+             
+             document.querySelectorAll('.task-btn').forEach(b => b.classList.remove('active'));
+             btn.classList.add('active');
+             
+             state.task = taskObj.name;
+             updateView();
+          });
+          
+          els.taskContainer.appendChild(btn);
+        });
+      }
+
+      // Update Image & Metadata
+      function updateView(immediate = false) {
+        const filename = state.task.toLowerCase().replace(/ /g, '_').replace(/-/g, '_') + '.png';
+        const fullPath = `${CONFIG.basePath}/${state.model}/${filename}`;
+
+        els.modelTag.textContent = CONFIG.models[state.model].name;
+        els.taskTag.textContent = state.task;
+
+        if (!immediate) {
+          els.img.classList.add('fading');
+          els.spinner.classList.add('active');
+        }
+
+        const loader = new Image();
+        loader.onload = () => {
+          els.img.src = fullPath;
+          setTimeout(() => {
+            els.img.classList.remove('fading');
+            els.spinner.classList.remove('active');
+          }, 200);
+        };
+        loader.onerror = () => {
+            console.error('Image not found:', fullPath);
+            els.spinner.classList.remove('active');
+        };
+        loader.src = fullPath;
+      }
+
+      init();
+    });
+  </script>
+</section>
+
+  <!-- Usage -->
+<section class="section">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        
+        <div class="has-text-centered mb-6">
+          <h2 class="title is-4">🚀 Quick Start</h2>
+          <p class="subtitle is-6 has-text-grey">
+            Integrate <strong>RegionE</strong> in seconds for lossless acceleration.
+          </p>
+        </div>
+
+        <div class="content mb-6">
+          <div class="is-flex is-align-items-center mb-4">
+            <span class="tag is-info is-rounded is-medium mr-4">1</span>
+            <span class="is-size-5 has-text-weight-semibold">Install via PyPI</span>
+          </div>
+          
+          <div style="
+            background-color: #1e1e1e; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #333;">
+            <div style="background-color: #2d2d2d; padding: 8px 16px; display: flex; align-items: center; border-bottom: 1px solid #3c3c3c;">
+              <div style="display: flex; gap: 6px;">
+                <span style="width: 10px; height: 10px; background: #ff5f57; border-radius: 50%;"></span>
+                <span style="width: 10px; height: 10px; background: #febc2e; border-radius: 50%;"></span>
+                <span style="width: 10px; height: 10px; background: #28c840; border-radius: 50%;"></span>
+              </div>
+              <span style="margin-left: 15px; color: #888; font-size: 0.75rem; font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace !important;">Terminal</span>
+            </div>
+            <pre style="background: transparent; padding: 1.25rem; margin: 0; font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace !important; font-size: 0.85rem;"><code style="font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace !important;"><span style="color: #6272a4;"># Install RegionE module</span>
+<span style="color: #50fa7b;">$</span> <span style="color: #f8f8f2;">pip install RegionE</span></code></pre>
+          </div>
+        </div>
+
+        <div class="content">
+          <div class="is-flex is-align-items-center mb-4">
+            <span class="tag is-success is-rounded is-medium mr-4">2</span>
+            <span class="is-size-5 has-text-weight-semibold">Integrate with <span class="has-text-success">4 Lines</span> of Code</span>
+          </div>
+
+          <div style="
+            background-color: #1e1e1e; 
+            border-radius: 12px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2); 
+            overflow: hidden;
+            border: 1px solid #333;">
+            
+            <div style="background-color: #2d2d2d; padding: 10px 20px; display: flex; align-items: center; border-bottom: 1px solid #444;">
+              <div style="display: flex; gap: 8px;">
+                <span style="width: 12px; height: 12px; background: #ff5f57; border-radius: 50%;"></span>
+                <span style="width: 12px; height: 12px; background: #febc2e; border-radius: 50%;"></span>
+                <span style="width: 12px; height: 12px; background: #28c840; border-radius: 50%;"></span>
+              </div>
+              <span style="margin-left: 20px; color: #9da5b4; font-size: 0.75rem; font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace !important;">example_inference.py</span>
+            </div>
+
+            <pre style="background: transparent; padding: 20px; margin: 0; overflow-x: auto; line-height: 1.6; font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace !important; font-size: 0.84rem;">
+<code style="color: #d4d4d4; font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace !important;"><span style="color: #c586c0;">import</span> <span style="color: #9cdcfe;">torch</span>
+<span style="color: #c586c0;">from</span> <span style="color: #9cdcfe;">diffusers</span> <span style="color: #c586c0;">import</span> <span style="color: #4ec9b0;">Step1XEditPipeline</span>
+<span style="color: #c586c0;">from</span> <span style="color: #9cdcfe;">diffusers.utils</span> <span style="color: #c586c0;">import</span> <span style="color: #dcdcaa;">load_image</span>
+
+<span style="color: #6a9955;"># (1) --- Import RegionE ---</span>
+<span style="background-color: #1a3a1e; display: block; width: 100%; border-left: 3px solid #28c840; padding-left: 5px;"><span style="color: #c586c0;">from</span> <span style="color: #9cdcfe;">RegionE</span> <span style="color: #c586c0;">import</span> <span style="color: #4ec9b0;">RegionEHelper</span></span>
+<span style="color: #6a9955;"># Loading the original pipeline</span>
+<span style="color: #9cdcfe;">pipeline</span> = <span style="color: #4ec9b0;">Step1XEditPipeline</span>.<span style="color: #dcdcaa;">from_pretrained</span>(
+    <span style="color: #ce9178;">"stepfun-ai/Step1X-Edit-v1p1-diffusers"</span>,
+    <span style="color: #9cdcfe;">torch_dtype</span>=<span style="color: #9cdcfe;">torch</span>.<span style="color: #9cdcfe;">bfloat16</span>
+)
+<span style="color: #9cdcfe;">pipeline</span>.<span style="color: #dcdcaa;">to</span>(<span style="color: #ce9178;">"cuda"</span>)
+
+<span style="color: #6a9955;"># (2-4) --- Enable RegionE Acceleration ---</span>
+<div style="background-color: #1a3a1e; border-left: 3px solid #28c840; padding-left: 5px;"><span style="color: #9cdcfe;">regionehelper</span> = <span style="color: #4ec9b0;">RegionEHelper</span>(<span style="color: #9cdcfe;">pipeline</span>)
+<span style="color: #9cdcfe;">regionehelper</span>.<span style="color: #dcdcaa;">set_params</span>()  <span style="color: #6a9955;"># default hyperparameter</span>
+<span style="color: #9cdcfe;">regionehelper</span>.<span style="color: #dcdcaa;">enable</span>()</div>
+<span style="color: #6a9955;"># Generate Image</span>
+<span style="color: #9cdcfe;">image</span> = <span style="color: #dcdcaa;">load_image</span>(<span style="color: #ce9178;">"demo_0.png"</span>).<span style="color: #dcdcaa;">convert</span>(<span style="color: #ce9178;">"RGB"</span>)
+<span style="color: #9cdcfe;">prompt</span> = <span style="color: #ce9178;">"Replace the text 'SUMMER' with 'WINTER'"</span>
+<span style="color: #9cdcfe;">image</span> = <span style="color: #dcdcaa;">pipeline</span>(
+    <span style="color: #9cdcfe;">image</span>=<span style="color: #9cdcfe;">image</span>,
+    <span style="color: #9cdcfe;">prompt</span>=<span style="color: #9cdcfe;">prompt</span>,
+    <span style="color: #9cdcfe;">num_inference_steps</span>=<span style="color: #b5cea8;">28</span>,
+    <span style="color: #9cdcfe;">true_cfg_scale</span>=<span style="color: #b5cea8;">6.0</span>,
+    <span style="color: #9cdcfe;">generator</span>=<span style="color: #9cdcfe;">torch</span>.<span style="color: #dcdcaa;">Generator</span>().<span style="color: #dcdcaa;">manual_seed</span>(<span style="color: #b5cea8;">42</span>),
+).<span style="color: #9cdcfe;">images</span>[<span style="color: #b5cea8;">0</span>]
+<span style="color: #9cdcfe;">image</span>.<span style="color: #dcdcaa;">save</span>(<span style="color: #ce9178;">"output_edit.jpg"</span>)
+
+<span style="color: #9cdcfe;">regionehelper</span>.<span style="color: #dcdcaa;">disable</span>()</code></pre>
+          </div>
+          
+          <div class="is-flex is-justify-content-space-between is-align-items-center mt-4">
+            <p class="has-text-grey-light is-size-7">
+              * RegionE seamlessly integrates with Step1X-Edit, Qwen-Image-Edit, FLUX.1-Kontext and so on.
+            </p>
+            <a href="https://github.com/Peyton-Chen/RegionE/tree/main/RegionE" class="button is-small is-link is-light is-rounded">Full Usage Guide →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Email -->
+  <section class="section hero is-light">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-three-quarters has-text-centered">
+          <h2 class="title is-4">
+            <span class="icon-text is-inline-flex is-align-items-center">
+              <span class="icon mr-3">
+                <i class="fas fa-envelope"></i>
+              </span>
+              <span>Get in Touch</span>
+            </span>
+          </h2>
+          <p class="subtitle is-6">
+            If you have any questions or would like to discuss further, please feel free to contact me at:
+            <br>
+            <a href="mailto:Pengt.Chen@gmail.com" class="has-text-weight-bold is-size-6">Pengt.Chen@gmail.com</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code id="bibtex-code">@article{chen2025regione,
+  title={RegionE: Adaptive Region-Aware Generation for Efficient Image Editing},
+  author={Chen, Pengtao and Zeng, Xianfang and Zhao, Maosen and Shen, Mingzhu and Ye, Peng and Xiang, Bangyin and Wang, Zhibo and Cheng, Wei and Yu, Gang and Chen, Tao},
+  journal={arXiv preprint arXiv:2510.25590},
+  year={2025}
+}</code></pre>
+      <button class="button is-dark" onclick="copyBibTex()">Copy BibTeX</button>
+    </div>
+  </section>
+
+  <script>
+    function copyBibTex() {
+      var copyText = document.getElementById("bibtex-code").innerText;
+      navigator.clipboard.writeText(copyText).then(function () {
+        alert("BibTeX copied to clipboard!");
+      }, function (err) {
+        alert("Failed to copy BibTeX: ", err);
+      });
+    }
+  </script>
+  <!--End BibTex citation -->
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+
+            <p>
+              This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template"
+                target="_blank">Academic Project Page Template</a> which was adopted from the <a
+                href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+              You are free to borrow the source code of this website, we just ask that you link back to this page in the
+              footer. <br> This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Statcounter tracking code -->
+
+  <!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+  <!-- End of Statcounter Code -->
+
+</body>
+
+</html>
