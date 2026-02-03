@@ -14,6 +14,7 @@
 <div align="center">
 <a href='https://arxiv.org/abs/2510.25590'><img src='https://img.shields.io/badge/arXiv-2510.25590-b31b1b.svg'></a> &nbsp;&nbsp;&nbsp;&nbsp;
 <a href='https://pypi.org/project/RegionE/'><img src='https://img.shields.io/badge/PyPi-RegionE-blue'></a> &nbsp;&nbsp;&nbsp;&nbsp;
+<a href='https://peyton-chen.github.io/RegionE/'><img src='https://img.shields.io/badge/Project-Page-green'></a> &nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 
 ## 🥳 What's New 
